@@ -1,0 +1,13 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<form asp-action="RegisterNewEmployee" asp-controller="Admin" method="post">
+    <h1>اضافة مستخدم جديد</h1>
+
+</form>
+
+
+@await Component.InvokeAsync("EmployeesList")

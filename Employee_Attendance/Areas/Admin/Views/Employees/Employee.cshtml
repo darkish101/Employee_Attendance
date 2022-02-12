@@ -1,0 +1,44 @@
+﻿@model EmployeeViewModel
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<form asp-area="Admin" asp-controller="Employees" asp-action="SaveAsync" method="post">
+
+    @*@Html.ValidationSummary(true, "الرجاء إكمال:")*@
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+    <div class="form-row">
+        <div class="col">
+            <input type="text" asp-for="UserName" class="form-control" />
+        </div>
+        <div class="col">
+            <input type="text" asp-for="Employment_Id" class="form-control" />
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="col">
+            <input type="text" asp-for="Employee_Name" class="form-control" />
+        </div>
+        <div class="col">
+            <input type="text" asp-for="Email" class="form-control" />
+        </div>
+    </div>
+     <div class="form-row">
+        <div class="col">
+            <input type="password" asp-for="Passowrd" class="form-control" />
+        </div>
+        <div class="col">
+            <input type="password" asp-for="Confirmpwd" class="form-control" />
+        </div>
+    </div>
+
+
+    @Html.HiddenFor(m => m.Id)
+    @Html.AntiForgeryToken()
+
+    <button type="submit">@Model.MethodType</button>
+</form>
