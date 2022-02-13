@@ -15,21 +15,20 @@ namespace Employee_Attendance.Business
         private readonly IUnitOfWork _iUnitOfWork;
         private readonly UserManager<Employee> _userManager;
 
-        public EmployeeDomain(EmployeeRepository repository, IUnitOfWork unitOfWork)//: base(repository, unitOfWork)
+        public EmployeeDomain(EmployeeRepository repository, IUnitOfWork unitOfWork, UserManager<Employee> userManager)//: base(repository, unitOfWork)
         {
             _employeeRepository = repository;
             _iUnitOfWork = unitOfWork;
+            _userManager = userManager;
         }
         public async Task InsertEmployee(EmployeeViewModel viewModel)
         {
-            try
-            {
                 var employee = new Employee();
                 employee.Employee_Name = viewModel.Employee_Name;
                 employee.Employment_Id= viewModel.Employment_Id;
                 employee.Email = viewModel.Email;
                 employee.UserName = viewModel.UserName;
-                employee.PasswordHash = viewModel.PasswordHash;
+                employee.PasswordHash = viewModel.Passowrd;
                 employee.Added_By = viewModel.Added_By;
 
                 await   _userManager.CreateAsync(employee);
@@ -37,11 +36,6 @@ namespace Employee_Attendance.Business
 
                 //await _employeeRepository.InsertAsync(employee);
                 //await _iUnitOfWork.SaveChangesAsync();
-            }
-            catch
-            {
-                throw;
-            }
         }
         public async Task UpdateEmployee(EmployeeViewModel viewModel)
         {

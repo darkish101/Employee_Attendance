@@ -29,6 +29,7 @@ namespace Employee_Attendance
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpContextAccessor();
             services.AddDbContext<EmployeeAttendanceContext>(options =>
                            options.UseSqlServer(
                                Configuration.GetConnectionString("dbConctionString")))
@@ -36,16 +37,16 @@ namespace Employee_Attendance
             services.AddControllersWithViews();
             services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Latest);
 
-            services.AddDefaultIdentity<Employee>(options => { 
+            services.AddDefaultIdentity<Employee>(options =>
+            {
                 options.SignIn.RequireConfirmedAccount = false;
                 options.SignIn.RequireConfirmedPhoneNumber = false;
             })
                  .AddRoles<IdentityRole>()
                  .AddEntityFrameworkStores<EmployeeAttendanceContext>();
 
-            services.AddHttpContextAccessor();
             //Template
-           // services.AddScoped<SignInManager<Employee>>();
+            // services.AddScoped<SignInManager<Employee>>();
             services.AddScoped<EmployeeDomain>();
             services.AddScoped<EmployeeRepository>();
         }
@@ -61,9 +62,12 @@ namespace Employee_Attendance
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-            app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseHttpsRedirection();
+
+            app.UseStaticFiles();
 
             app.UseAuthentication();
 
@@ -71,14 +75,16 @@ namespace Employee_Attendance
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapAreaControllerRoute(
+                    name: "Admin",
+                    areaName: "Admin",
+                    pattern: "Admin/{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute(
+                    name: "areaRoute",
+                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
-                endpoints.MapAreaControllerRoute(
-            name: "Admin",
-            areaName: "Admin",
-            pattern: "Admin/{controller=Home}/{action=Index}/{id?}");
-
             });
         }
     }

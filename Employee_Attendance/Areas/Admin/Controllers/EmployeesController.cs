@@ -44,8 +44,8 @@ namespace Employee_Attendance.Areas.Admin.Controllers
         {
             return View("Employee", new EmployeeViewModel());
         }
-
-        public async Task<ActionResult> EditEmployeeAsync(string id)
+        [HttpPost]
+        public async Task<ActionResult> EditEmployee(string id)
         {
             var modal = await _domain.EmployeeById(id);
             return View("Employee", modal);
@@ -54,12 +54,22 @@ namespace Employee_Attendance.Areas.Admin.Controllers
         // POST: EmployeesController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> SaveAsync(EmployeeViewModel modal)
+        public async Task<ActionResult> Save(EmployeeViewModel modal)
         {
-            modal.Added_By =  User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            await _domain.InsertEmployee(modal);
+            if (ModelState.IsValid)
+            {
+                try
+                {
 
-            return RedirectToAction("Index","Home");
+                    modal.Added_By = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                    await _domain.InsertEmployee(modal);
+
+                    return RedirectToAction("Index", "Home");
+                }
+                catch
+                { }
+            }
+                return View("Employee", modal);
             //try
             //{
             //    return RedirectToAction(nameof(Index));

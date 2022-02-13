@@ -4,12 +4,12 @@
 *@
 @{
 }
-<form asp-area="Admin" asp-controller="Employees" asp-action="SaveAsync" method="post">
+<form asp-area="Admin" asp-controller="Employees" asp-action="Save" method="post">
 
     @*@Html.ValidationSummary(true, "الرجاء إكمال:")*@
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-
+    <h1>@Model.MethodType الموظف</h1>
     <div class="form-row">
         <div class="col">
             <input type="text" asp-for="UserName" class="form-control" />
@@ -40,5 +40,6 @@
     @Html.HiddenFor(m => m.Id)
     @Html.AntiForgeryToken()
 
-    <button type="submit">@Model.MethodType</button>
+    <br />
+    <button type="submit" class="btn btn-primary">@Model.MethodType</button>
 </form>
