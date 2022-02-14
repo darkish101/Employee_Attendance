@@ -26,32 +26,37 @@ namespace Employee_Attendance.Areas.Admin.Controllers
             _userManager = userManager;
             _domain = Domain;
         }
-        // GET: EmployeesController
-        public async Task<ActionResult> Index()
+
+        public ActionResult Index()
         {
-            return View(await _domain.GetAllEmployee());
+            return View();
         }
 
-        // GET: EmployeesController/Details/5
-        public async Task<ActionResult> Details(string id)
+        public async Task<ActionResult> Show(string id)
         {
             var modal = await _domain.EmployeeById(id);
             return View(modal);
         }
 
-        // GET: EmployeesController/Create
         public ActionResult Employee()
         {
             return View("Employee", new EmployeeViewModel());
         }
-        [HttpPost]
+
+        public async Task<ActionResult> DeleteEmployee(string id)
+        {
+            await _domain.DeleteEmployee(id);
+
+            return RedirectToAction("Index", "Employees");
+        }
+
         public async Task<ActionResult> EditEmployee(string id)
         {
             var modal = await _domain.EmployeeById(id);
             return View("Employee", modal);
         }
 
-        // POST: EmployeesController/Create
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Save(EmployeeViewModel modal)
@@ -60,67 +65,19 @@ namespace Employee_Attendance.Areas.Admin.Controllers
             {
                 try
                 {
-
                     modal.Added_By = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                    await _domain.InsertEmployee(modal);
-
-                    return RedirectToAction("Index", "Home");
+                    var result = await _domain.InsertEmployee(modal);
+                    if (result.Succeeded)
+                        return RedirectToAction("Index", "Employees");
                 }
                 catch
                 { }
             }
-                return View("Employee", modal);
-            //try
-            //{
-            //    return RedirectToAction(nameof(Index));
-            //}
-            //catch
-            //{
-            //    return View();
-            //}
+            ModelState.AddModelError("save modal error", "الرجاء إكمال تعبة النموذج.");
+            return View("Employee", modal);
         }
 
-        // GET: EmployeesController/Edit/5
-      
-        // POST: EmployeesController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult EditEmployee(string id, IFormCollection collection)
-        {
-            return RedirectToAction("Index", "Home");
-
-            //try
-            //{
-            //    return RedirectToAction(nameof(Index));
-            //}
-            //catch
-            //{
-            //    return View();
-            //}
-        }
-
-        // GET: EmployeesController/Delete/5
-        public ActionResult DeleteEmployee(string id)
-        {
-            return View();
-        }
-
-        // POST: EmployeesController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteEmployee(string id, IFormCollection collection)
-        {
-            return RedirectToAction("Index", "Home");
-
-            //try
-            //{
-            //    return RedirectToAction(nameof(Index));
-            //}
-            //catch
-            //{
-            //    return View();
-            //}
-        }
+       
 
         //public async Task<IActionResult> RegisterNewEmployee(EmployeeViewModel modal)
         //{

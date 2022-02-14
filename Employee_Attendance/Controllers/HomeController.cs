@@ -32,7 +32,7 @@ namespace Employee_Attendance.Controllers
         [AllowAnonymous]
         public IActionResult Login()
         {
-            if (User.Identity.IsAuthenticated)
+            if (!User.Identity.IsAuthenticated)
                 return View();
             return RedirectToAction("Index", "Home");
         }
@@ -64,7 +64,7 @@ namespace Employee_Attendance.Controllers
         [AllowAnonymous]
         public IActionResult Register()
         {
-            if (User.Identity.IsAuthenticated)
+            if (!User.Identity.IsAuthenticated)
                 return View();
             return RedirectToAction("Index", "Home");
         }

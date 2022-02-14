@@ -21,29 +21,31 @@ namespace Employee_Attendance.Business
             _iUnitOfWork = unitOfWork;
             _userManager = userManager;
         }
-        public async Task InsertEmployee(EmployeeViewModel viewModel)
+        public async Task <IdentityResult> InsertEmployee(EmployeeViewModel viewModel)
         {
-                var employee = new Employee();
-                employee.Employee_Name = viewModel.Employee_Name;
-                employee.Employment_Id= viewModel.Employment_Id;
-                employee.Email = viewModel.Email;
-                employee.UserName = viewModel.UserName;
-                employee.PasswordHash = viewModel.Passowrd;
-                employee.Added_By = viewModel.Added_By;
+            var employee = new Employee();
+            employee.Employee_Name = viewModel.Employee_Name;
+            employee.Employment_Id = viewModel.Employment_Id;
+            employee.Email = viewModel.Email;
+            employee.UserName = viewModel.UserName;
+            employee.Added_By = viewModel.Added_By;
 
-                await   _userManager.CreateAsync(employee);
+            var result = await _userManager.CreateAsync(employee, viewModel.Passowrd);
 
-
-                //await _employeeRepository.InsertAsync(employee);
-                //await _iUnitOfWork.SaveChangesAsync();
+            return result;
         }
         public async Task UpdateEmployee(EmployeeViewModel viewModel)
         {
             try
             {
-                var employee = await _employeeRepository.GetEmployeeById(Convert.ToInt32(viewModel.Id));
+                var employee = await _employeeRepository.GetEmployeeById(viewModel.Id);
                 employee.Employee_Name = viewModel.Employee_Name;
                 employee.Employment_Id = viewModel.Employment_Id;
+                employee.Email = viewModel.Email;
+                employee.UserName = viewModel.UserName;
+                employee.Id = viewModel.Id;
+
+                await _userManager.UpdateAsync(employee);
                 await _iUnitOfWork.SaveChangesAsync(); // base.UpdateAsync(employee);
             }
             catch
@@ -51,11 +53,11 @@ namespace Employee_Attendance.Business
                 throw;
             }
         }
-        public async Task DeleteEmployee(int Id)
+        public async Task DeleteEmployee(string Id)
         {
             try
             {
-                await _employeeRepository.DeleteAsync(Id); // base.DeleteAsync(Id);
+                var result = await _userManager.DeleteAsync(await _employeeRepository.GetEmployeeById(Id));
             }
             catch
             {
@@ -69,10 +71,12 @@ namespace Employee_Attendance.Business
                 var categories = await _employeeRepository.GetAllEmployee();
                 return categories.Select(x => new EmployeeViewModel
                 {
-                    Id = x.Id,
                     Employee_Name = x.Employee_Name,
-                    UserName = x.UserName,
                     Employment_Id = x.Employment_Id,
+                    Email = x.Email,
+                    UserName = x.UserName,
+                    Added_By = x.Added_By,
+                    Id = x.Id
                 }).ToList();
             }
             catch
@@ -88,9 +92,12 @@ namespace Employee_Attendance.Business
                 var employee = Data.First(x => x.Id == Id);
                 return new EmployeeViewModel
                 {
-                    Id = employee.Id,
                     Employee_Name = employee.Employee_Name,
                     Employment_Id = employee.Employment_Id,
+                    Email = employee.Email,
+                    UserName = employee.UserName,
+                    Added_By = employee.Added_By,
+                    Id = employee.Id
                 };
             }
             catch

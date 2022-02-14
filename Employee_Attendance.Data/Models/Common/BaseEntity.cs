@@ -12,11 +12,11 @@ namespace Employee_Attendance.Data
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public virtual TKey Id { get; set; }
 
-        [Column(Order = 1001)]
+        [Column(Order = 20)]
         [DefaultValue("GETDATE()")]
         public DateTime? Created_On { get; set; }
 
-        [Column(Order = 1002)]
+        [Column(Order = 21)]
         public DateTime? LastUpdatedDate { get; set; }
     }
 }

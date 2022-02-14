@@ -4,14 +4,16 @@ using Employee_Attendance.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Employee_Attendance.Data.Migrations
 {
     [DbContext(typeof(EmployeeAttendanceContext))]
-    partial class EmployeeAttendanceContextModelSnapshot : ModelSnapshot
+    [Migration("20220214204618_creatingAttendanceTable")]
+    partial class creatingAttendanceTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

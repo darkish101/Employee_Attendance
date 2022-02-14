@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace Employee_Attendance.Data
 {
@@ -9,5 +8,6 @@ namespace Employee_Attendance.Data
         public EmployeeAttendanceContext(DbContextOptions<EmployeeAttendanceContext> options): base (options)
         {}
         public virtual DbSet<Employee> Employees { set; get; }
+        public virtual DbSet<Attendance> Attendances { set; get; }
     }
 }
