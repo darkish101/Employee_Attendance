@@ -13,28 +13,28 @@ namespace Employee_Attendance.Data
         [DefaultValue("CONVERT(DATE ,GETDATE())")]
         public DateTime AttendanceDay { get; set; }
 
-        [Column(TypeName = "time(7)", Order = 3)]
+        [Column(TypeName = "time(0)", Order = 3)]
         public TimeSpan CheckInDayStart { get; set; }
         
-        [Column(TypeName = "time(7)", Order = 4)]
-        public TimeSpan CheckOutLunchBrake { get; set; }
+        [Column(TypeName = "time(0)", Order = 4)]
+        public TimeSpan? CheckOutLunchBrake { get; set; }
         
-        [Column(TypeName = "time(7)", Order = 5)]
-        public TimeSpan CheckInLunchBrake { get; set; }
+        [Column(TypeName = "time(0)", Order = 5)]
+        public TimeSpan? CheckInLunchBrake { get; set; }
         
-        [Column(TypeName = "time(7)", Order = 6)]
-        public TimeSpan CheckOutDayEnd { get; set; }
+        [Column(TypeName = "time(0)", Order = 6)]
+        public TimeSpan? CheckOutDayEnd { get; set; }
 
         [Column(TypeName = "bit", Order = 7)]
         [DefaultValue(0)]
-        public bool LateCheckIn { get; set; }
+        public bool? LateCheckIn { get; set; }
         
         [Column(TypeName = "nvarchar(150)", Order = 8)]
         public string LateCheckInReason { get; set; }
         
         [Column(TypeName = "bit", Order = 9)]
         [DefaultValue(0)]
-        public bool EarlyCheckOutDayEnd { get; set; }
+        public bool? EarlyCheckOutDayEnd { get; set; }
 
          [Column(TypeName = "nvarchar(150)", Order = 10)]
         public string EarlyCheckOutReason { get; set; }

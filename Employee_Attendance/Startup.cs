@@ -1,4 +1,5 @@
 using Arch.EntityFrameworkCore.UnitOfWork;
+using AutoMapper;
 using Employee_Attendance.Business;
 using Employee_Attendance.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -37,6 +38,15 @@ namespace Employee_Attendance
                                Configuration.GetConnectionString("dbConctionString")))
                            .AddUnitOfWork<EmployeeAttendanceContext>();
             services.AddControllersWithViews();
+
+            var mapperConfig = new MapperConfiguration(m =>
+            {
+                m.AddProfile(new MappingProfile());
+            });
+
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
+
             services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Latest);
 
             services.AddDefaultIdentity<Employee>(options =>
