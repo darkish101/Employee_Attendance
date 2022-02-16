@@ -3,46 +3,50 @@
 
 }
 <form asp-area="Admin" asp-controller="Employees" asp-action="Save" method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="card">
+        <div class="card-body">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-    <h1>@Model.MethodType الموظف</h1>
-    <div class="form-row">
-        <div class="col">
-            <input type="text" asp-for="UserName" class="form-control" />
-            <span asp-validation-for="UserName" class="text-danger"></span>
+            <h1>@Model.MethodType الموظف</h1>
+            <div class="form-row">
+                <div class="col">
+                    <input type="text" asp-for="UserName" class="form-control" />
+                    <span asp-validation-for="UserName" class="text-danger"></span>
 
-        </div>
-        <div class="col">
-            <input type="text" asp-for="Employment_Id" class="form-control" />
-            <span asp-validation-for="Employment_Id" class="text-danger"></span>
+                </div>
+                <div class="col">
+                    <input type="text" asp-for="Employment_Id" class="form-control" />
+                    <span asp-validation-for="Employment_Id" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="col">
+                    <input type="text" asp-for="Employee_Name" class="form-control" />
+                    <span asp-validation-for="Employee_Name" class="text-danger"></span>
+                </div>
+                <div class="col">
+                    <input type="text" asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col">
+                    <input type="password" asp-for="Passowrd" class="form-control" />
+                    <span asp-validation-for="Passowrd" class="text-danger"></span>
+                </div>
+                <div class="col">
+                    <input type="password" asp-for="Confirmpwd" class="form-control" />
+                    <span asp-validation-for="Confirmpwd" class="text-danger"></span>
+                </div>
+            </div>
+
+
+            @Html.HiddenFor(m => m.Id)
+            @Html.AntiForgeryToken()
+
+            <br />
+            <button type="submit" class="btn btn-primary btn-lg">@Model.MethodType</button>
         </div>
     </div>
-
-    <div class="form-row">
-        <div class="col">
-            <input type="text" asp-for="Employee_Name" class="form-control" />
-            <span asp-validation-for="Employee_Name" class="text-danger"></span>
-        </div>
-        <div class="col">
-            <input type="text" asp-for="Email" class="form-control" />
-            <span asp-validation-for="Email" class="text-danger"></span>
-        </div>
-    </div>
-     <div class="form-row">
-        <div class="col">
-            <input type="password" asp-for="Passowrd" class="form-control" />
-            <span asp-validation-for="Passowrd" class="text-danger"></span>
-        </div>
-        <div class="col">
-            <input type="password" asp-for="Confirmpwd" class="form-control" />
-            <span asp-validation-for="Confirmpwd" class="text-danger"></span>
-        </div>
-    </div>
-
-
-    @Html.HiddenFor(m => m.Id)
-    @Html.AntiForgeryToken()
-
-    <br />
-    <button type="submit" class="btn btn-primary">@Model.MethodType</button>
 </form>

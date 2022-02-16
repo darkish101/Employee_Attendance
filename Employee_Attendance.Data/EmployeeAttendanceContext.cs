@@ -9,5 +9,6 @@ namespace Employee_Attendance.Data
         {}
         public virtual DbSet<Employee> Employees { set; get; }
         public virtual DbSet<Attendance> Attendances { set; get; }
+        public virtual DbSet<Role> Roles { set; get; }
     }
 }
