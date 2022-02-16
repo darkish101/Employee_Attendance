@@ -1,4 +1,5 @@
 ﻿using Arch.EntityFrameworkCore.UnitOfWork;
+using AutoMapper;
 using Employee_Attendance.Data;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -14,23 +15,28 @@ namespace Employee_Attendance.Business
         private readonly EmployeeRepository _employeeRepository;
         private readonly IUnitOfWork _iUnitOfWork;
         private readonly UserManager<Employee> _userManager;
-
-        public EmployeeDomain(EmployeeRepository repository, IUnitOfWork unitOfWork, UserManager<Employee> userManager)//: base(repository, unitOfWork)
+        private readonly IMapper _mapper;
+        public EmployeeDomain(EmployeeRepository repository, IUnitOfWork unitOfWork
+            , UserManager<Employee> userManager, IMapper mapper)
         {
             _employeeRepository = repository;
             _iUnitOfWork = unitOfWork;
             _userManager = userManager;
+            _mapper = mapper;
         }
         public async Task <IdentityResult> InsertEmployee(EmployeeViewModel viewModel)
         {
-            var employee = new Employee();
-            employee.Employee_Name = viewModel.Employee_Name;
-            employee.Employment_Id = viewModel.Employment_Id;
-            employee.Email = viewModel.Email;
-            employee.UserName = viewModel.UserName;
-            employee.Added_By = viewModel.Added_By;
+            //var employee = new Employee();
+            //employee.Employee_Name = viewModel.Employee_Name;
+            //employee.Employment_Id = viewModel.Employment_Id;
+            //employee.Email = viewModel.Email;
+            //employee.UserName = viewModel.UserName;
+            //employee.Added_By = viewModel.Added_By;
 
-            var result = await _userManager.CreateAsync(employee, viewModel.Passowrd);
+            //var result = await _userManager.CreateAsync(employee, viewModel.Passowrd);
+           
+
+            var result = await _userManager.CreateAsync(_mapper.Map<Employee>(viewModel), viewModel.Passowrd);
 
             return result;
         }
@@ -46,7 +52,7 @@ namespace Employee_Attendance.Business
                 employee.Id = viewModel.Id;
 
                 await _userManager.UpdateAsync(employee);
-                await _iUnitOfWork.SaveChangesAsync(); // base.UpdateAsync(employee);
+                //await _iUnitOfWork.SaveChangesAsync(); // base.UpdateAsync(employee);
             }
             catch
             {
@@ -68,8 +74,8 @@ namespace Employee_Attendance.Business
         {
             try
             {
-                var categories = await _employeeRepository.GetAllEmployee();
-                return categories.Select(x => new EmployeeViewModel
+                var empList = await _employeeRepository.GetAllEmployee();
+                return empList.Select(x => new EmployeeViewModel
                 {
                     Employee_Name = x.Employee_Name,
                     Employment_Id = x.Employment_Id,

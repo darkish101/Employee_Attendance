@@ -3,6 +3,7 @@ using AutoMapper;
 using Employee_Attendance.Data;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,12 +13,13 @@ namespace Employee_Attendance.Business
     {
         private readonly AttendanceRepository _repostory;
         private readonly IMapper _mapper;
-        public AttendanceDomain(AttendanceRepository repository, IUnitOfWork unitOfWork, IMapper mapper) : base(repository, unitOfWork)
+        public AttendanceDomain(AttendanceRepository repository, IUnitOfWork unitOfWork
+            , IMapper mapper) : base(repository, unitOfWork)
         {
             _repostory = repository;
             _mapper = mapper;
         }
-        public async Task InsertTemplate(AttendanceViewModel viewModel)
+        public async Task InsertAttendance(AttendanceViewModel viewModel)
         {
             try
             {
@@ -30,21 +32,20 @@ namespace Employee_Attendance.Business
                 throw;
             }
         }
-        public async Task UpdateTemplate(AttendanceViewModel viewModel)
+        public async Task UpdateAttendance(AttendanceViewModel viewModel)
         {
             try
             {
-                var template = await _repository.GetAllAttendance();
                 var modal = _mapper.Map<Attendance>(viewModel);
 
-                await base.UpdateAsync(template);
+                await base.UpdateAsync(modal);
             }
             catch
             {
                 throw;
             }
         }
-        public async Task DeleteTemplate(int Id)
+        public async Task DeleteAttendance(int Id)
         {
             try
             {
@@ -55,37 +56,39 @@ namespace Employee_Attendance.Business
                 throw;
             }
         }
-        public async Task<List<AttendanceViewModel>> GetAllTemplate()
+        public async Task<List<AttendanceViewModel>> GetAllAttendance()
         {
             try
             {
-                var categories = await _TemplateRepository.GetAllTemplate();
-                var modal = _mapper.Map<Attendance>(viewModel);
+                var attendances = await _repostory.GetAllAttendance();
+                var modal = _mapper.Map<List<AttendanceViewModel>>(attendances);
 
-                return categories.Select(x => new TemplateViewModel
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    PhotoString = x.Photo,
-                }).ToList();
+                return modal;
+                //    categories.Select(x => new TemplateViewModel
+                //{
+                //    Id = x.Id,
+                //    Name = x.Name,
+                //    PhotoString = x.Photo,
+                //}).ToList();
             }
             catch
             {
                 throw;
             }
         }
-        public async Task<AttendanceViewModel> TemplateById(int Id)
+        public async Task<AttendanceViewModel> AttendanceById(int Id)
         {
             try
             {
-                var Data = await _TemplateRepository.GetAllTemplate();
-                var template = Data.First(x => x.Id == Id);
-                return new TemplateViewModel
-                {
-                    Id = template.Id,
-                    Name = template.Name,
-                    PhotoString = template.Photo,
-                };
+                var data = await _repostory.GetAllAttendance();
+                var attendance = data.First(x => x.Id == Id);
+                return _mapper.Map<AttendanceViewModel>(attendance);
+                //    new TemplateViewModel
+                //{
+                //    Id = template.Id,
+                //    Name = template.Name,
+                //    PhotoString = template.Photo,
+                //};
             }
             catch
             {

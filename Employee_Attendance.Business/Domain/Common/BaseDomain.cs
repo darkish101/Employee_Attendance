@@ -38,7 +38,7 @@ namespace Employee_Attendance.Business
         {
             try
             {
-                _repository.SetAuditableInfo(request);
+                //_repository.SetAuditableInfo(request);
                 _repository.Delete(request);
                 return await CommitAsync();
             }
@@ -53,7 +53,7 @@ namespace Employee_Attendance.Business
             try
             {
                 var entity = _repository.Find(id);
-                _repository.SetAuditableInfo(entity);
+               // _repository.SetAuditableInfo(entity);
                 _repository.Delete(entity);
                 return await CommitAsync();
             }

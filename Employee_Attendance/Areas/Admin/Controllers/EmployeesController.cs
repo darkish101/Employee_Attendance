@@ -32,7 +32,7 @@ namespace Employee_Attendance.Areas.Admin.Controllers
             return View();
         }
 
-        public async Task<ActionResult> Show(string id)
+        public async Task<ActionResult> EmployeeDetails(string id)
         {
             var modal = await _domain.EmployeeById(id);
             return View(modal);

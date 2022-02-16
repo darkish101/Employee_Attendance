@@ -8,11 +8,11 @@ namespace Employee_Attendance.Data
     {
         public AttendanceRepository(EmployeeAttendanceContext context) : base(context)
         { }
-        public virtual async Task<List<Attendance>> GetAllAttendance()
+        public virtual async Task<IList<Attendance>> GetAllAttendance()
         {
             return await _dbSet.ToListAsync();
         }
-        public virtual async Task<List<Attendance>> GetAllEmployeeAttendance(dynamic employee_obj)
+        public virtual async Task<IList<Attendance>> GetAllEmployeeAttendance(dynamic employee_obj)
         {
             return await _dbSet.FindAsync(employee_obj);
         }

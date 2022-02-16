@@ -15,7 +15,7 @@ namespace Employee_Attendance.Business
             CreateMap<AttendanceViewModel, Attendance>();
 
             CreateMap<Employee, EmployeeViewModel>();
-            CreateMap<EmployeeViewModel, Employee>();
+            CreateMap<EmployeeViewModel, Employee>().ForMember(e => e.PasswordHash, m => m.MapFrom(m => m.Passowrd));
         }
     }
 }
