@@ -10,16 +10,66 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Employee_Attendance.Data.Migrations
 {
     [DbContext(typeof(EmployeeAttendanceContext))]
-    [Migration("20220211183138_createDatabase")]
-    partial class createDatabase
+    [Migration("20220216155242_seedRoleAndAdminUser")]
+    partial class seedRoleAndAdminUser
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.21")
+                .HasAnnotation("ProductVersion", "3.1.22")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("Employee_Attendance.Data.Attendance", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("AttendanceDay")
+                        .HasColumnType("Date");
+
+                    b.Property<TimeSpan>("CheckInDayStart")
+                        .HasColumnType("time(0)");
+
+                    b.Property<TimeSpan?>("CheckInLunchBrake")
+                        .HasColumnType("time(0)");
+
+                    b.Property<TimeSpan?>("CheckOutDayEnd")
+                        .HasColumnType("time(0)");
+
+                    b.Property<TimeSpan?>("CheckOutLunchBrake")
+                        .HasColumnType("time(0)");
+
+                    b.Property<DateTime?>("Created_On")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("EarlyCheckOutDayEnd")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("EarlyCheckOutReason")
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("Employee_ID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("LastUpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("LateCheckIn")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LateCheckInReason")
+                        .HasColumnType("nvarchar(150)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Employee_ID");
+
+                    b.ToTable("Attendances");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -235,13 +285,26 @@ namespace Employee_Attendance.Data.Migrations
                         .HasColumnType("nvarchar(450)")
                         .HasMaxLength(450);
 
+                    b.Property<DateTime?>("Created_On")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Employee_Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Employment_Id")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("LastUpdatedDate")
+                        .HasColumnType("datetime2");
+
                     b.HasDiscriminator().HasValue("Employee");
+                });
+
+            modelBuilder.Entity("Employee_Attendance.Data.Attendance", b =>
+                {
+                    b.HasOne("Employee_Attendance.Data.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("Employee_ID");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

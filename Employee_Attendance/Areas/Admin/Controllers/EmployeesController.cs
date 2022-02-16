@@ -12,18 +12,14 @@ using System.Threading.Tasks;
 
 namespace Employee_Attendance.Areas.Admin.Controllers
 {
-    [Area("Admin")]
     [Authorize]
+    [Area("Admin")]
     public class EmployeesController : Controller
     {
         private readonly EmployeeDomain _domain;
-        private readonly SignInManager<Employee> _signInManager;
-        private readonly UserManager<Employee> _userManager;
 
-        public EmployeesController(EmployeeDomain Domain, SignInManager<Employee> signInManager, UserManager<Employee> userManager)
+        public EmployeesController(EmployeeDomain Domain)
         {
-            _signInManager = signInManager;
-            _userManager = userManager;
             _domain = Domain;
         }
 
@@ -76,38 +72,5 @@ namespace Employee_Attendance.Areas.Admin.Controllers
             ModelState.AddModelError("save modal error", "الرجاء إكمال تعبة النموذج.");
             return View("Employee", modal);
         }
-
-       
-
-        //public async Task<IActionResult> RegisterNewEmployee(EmployeeViewModel modal)
-        //{
-
-        //    //if (ModelState.IsValid)
-        //    //{
-        //    var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-        //    var user = new Employee { 
-        //          UserName = modal.UserName
-        //        , NormalizedUserName = modal.UserName
-        //        , Email = modal.Email
-        //        , NormalizedEmail = modal.Email
-        //        , Employee_Name = modal.Employee_Name
-        //        , Employment_Id = modal.Employment_Id
-        //        , PhoneNumber = modal.PhoneNumber
-        //        , Added_By = currentUserId
-        //    };
-
-
-        //    var result = await _userManager.CreateAsync(user, modal.Passowrd);
-
-
-        //    await _Domain.InsertEmployee(modal);
-        //    //}
-        //    //else
-        //    //ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-        //    //return View();
-
-        //    return RedirectToAction("Index", "Admin");
-        //    //return View();
-        //}
     }
 }

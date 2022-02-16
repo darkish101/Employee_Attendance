@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Employee_Attendance.Areas.Admin.Controllers
 {
-    [Area("Admin")]
     [Authorize(Roles ="Admin")]
+    [Area("Admin")]
     public class HomeController : Controller
     {
         public IActionResult Index()

@@ -1,13 +1,15 @@
 ﻿@model EmployeeViewModel
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
 @{
-
 }
-<form asp-area="Admin" asp-controller="Employees" asp-action="Save" method="post">
+<form asp-action="Register" asp-controller="Auth" method="post">
     <div class="card">
         <div class="card-body">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <h1>@Model.MethodType الموظف</h1>
+            <h1>تسجيل جديد</h1>
             <div class="form-row">
                 <div class="col">
                     <input type="text" asp-for="UserName" class="form-control" />
@@ -41,23 +43,23 @@
                 </div>
             </div>
             @*<div class="form-row">
-                <div class="col">
-                    <label asp-for="Role"></label>
-                    @Html.DropDownListFor(m => m.Role, new SelectList(Model.Role, "Id", "Name"), "Please Select", new { @class = "form-control" })
-                    <span asp-validation-for="Role" class="text-danger"></span>
-                </div>
-                <div class="col">
-                    <input type="password" asp-for="Confirmpwd" class="form-control" />
-                    <span asp-validation-for="Confirmpwd" class="text-danger"></span>
-                </div>
-            </div>*@
+                    <div class="col">
+                        <label asp-for="Role"></label>
+                        @Html.DropDownListFor(m => m.Role, new SelectList(Model.Role, "Id", "Name"), "Please Select", new { @class = "form-control" })
+                        <span asp-validation-for="Role" class="text-danger"></span>
+                    </div>
+                    <div class="col">
+                        <input type="password" asp-for="Confirmpwd" class="form-control" />
+                        <span asp-validation-for="Confirmpwd" class="text-danger"></span>
+                    </div>
+                </div>*@
 
-            <input type="hidden" asp-for="Added_By" value="@User.FindFirst(ClaimTypes.NameIdentifier).Value" />
-            @Html.HiddenFor(m => m.Id)
+
+            @*@Html.HiddenFor(m => m.Id)*@
             @Html.AntiForgeryToken()
 
             <br />
-            <button type="submit" class="btn btn-primary btn-lg">@Model.MethodType</button>
+            <button type="submit" class="btn btn-primary btn-lg">تسجيل</button>
         </div>
     </div>
 </form>

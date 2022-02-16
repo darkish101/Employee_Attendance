@@ -29,23 +29,15 @@ namespace Employee_Attendance
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddHttpContextAccessor();
             services.AddDbContext<EmployeeAttendanceContext>(options =>
                            options.UseSqlServer(
-                               Configuration.GetConnectionString("dbConctionString")))
+                            Configuration.GetConnectionString("dbConctionString")))
                            .AddUnitOfWork<EmployeeAttendanceContext>();
+
             services.AddControllersWithViews();
-
-            var mapperConfig = new MapperConfiguration(m =>
-            {
-                m.AddProfile(new MappingProfile());
-            });
-
-            IMapper mapper = mapperConfig.CreateMapper();
-            services.AddSingleton(mapper);
 
             services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Latest);
 
@@ -59,7 +51,7 @@ namespace Employee_Attendance
                  .AddEntityFrameworkStores<EmployeeAttendanceContext>()
                  .AddDefaultTokenProviders();
 
-            //config users
+            //config Employee
             services.Configure<IdentityOptions>(options =>
             {
                 // Password settings.
@@ -83,25 +75,28 @@ namespace Employee_Attendance
 
             services.ConfigureApplicationCookie(options =>
             {
-                // Cookie settings
-            //     options.Cookie.Name = "AuthenticationCookie";
-            //    //options.Cookie.Expiration = TimeSpan.FromMinutes(45);
                 options.Cookie.HttpOnly = true;
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(45);
 
-                options.LoginPath = "/Home/Login";
-            //    options.LogoutPath = "/Account/Logout";
+                options.LoginPath = "/Auth/Login";
+                //    options.LogoutPath = "/Account/Logout";
                 //options.AccessDeniedPath = "/Identity/Account/AccessDenied";
-            //     options.ReturnUrlParameter = CookieAuthenticationDefaults.ReturnUrlParameter;
                 options.SlidingExpiration = true;
             });
 
-            // services.AddScoped<SignInManager<Employee>>();
+            var mapperConfig = new MapperConfiguration(m =>
+            {
+                m.AddProfile(new MappingProfile());
+            });
+
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
             services.AddScoped<EmployeeDomain>();
             services.AddScoped<EmployeeRepository>();
+            services.AddScoped<AttendanceDomain>();
+            services.AddScoped<AttendanceRepository>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

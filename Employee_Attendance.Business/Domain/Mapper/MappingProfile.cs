@@ -10,12 +10,15 @@ namespace Employee_Attendance.Business
     {
         public MappingProfile()
         {
-
+            // Source, Destination
             CreateMap<Attendance, AttendanceViewModel>();
             CreateMap<AttendanceViewModel, Attendance>();
 
-            CreateMap<Employee, EmployeeViewModel>();
-            CreateMap<EmployeeViewModel, Employee>().ForMember(e => e.PasswordHash, m => m.MapFrom(m => m.Passowrd));
+            CreateMap<Employee, EmployeeViewModel>()
+                .ForSourceMember(e => e.Id, opt => opt.DoNotValidate()); ;
+            CreateMap<EmployeeViewModel, Employee>()
+                .ForMember(e => e.PasswordHash, m => m.MapFrom(m => m.Passowrd))
+                .ForSourceMember(e => e.Id, opt => opt.DoNotValidate());
         }
     }
 }

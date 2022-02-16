@@ -12,17 +12,41 @@ namespace Employee_Attendance.Business
 {
    public class EmployeeDomain //: BaseDomain<Employee, EmployeeRepository>
     {
+        #region ctor
         private readonly EmployeeRepository _employeeRepository;
         private readonly IUnitOfWork _iUnitOfWork;
         private readonly UserManager<Employee> _userManager;
+        private readonly SignInManager<Employee> _signInManager;
         private readonly IMapper _mapper;
-        public EmployeeDomain(EmployeeRepository repository, IUnitOfWork unitOfWork
-            , UserManager<Employee> userManager, IMapper mapper)
+        public EmployeeDomain(EmployeeRepository repository
+            , IUnitOfWork unitOfWork
+            , UserManager<Employee> userManager
+            , SignInManager<Employee> signInManager
+            , IMapper mapper)
         {
             _employeeRepository = repository;
             _iUnitOfWork = unitOfWork;
             _userManager = userManager;
+            _signInManager = signInManager;
             _mapper = mapper;
+        }
+        #endregion
+        public async Task<SignInResult> LoginAsync(LoginViewModel model)
+        {
+           return await _signInManager.PasswordSignInAsync(model.UserName, model.Passowrd, true, lockoutOnFailure: false);
+        }
+        public async Task<IdentityResult> RegisterAsync(EmployeeViewModel model)
+        {
+            var user = _mapper.Map<Employee>(model);
+
+            user.Id = Guid.NewGuid().ToString();
+
+            var result = await _userManager.CreateAsync(user, model.Passowrd);
+            
+            if (result.Succeeded)
+                await _userManager.AddToRoleAsync(user, "Employee");
+
+            return result;
         }
         public async Task <IdentityResult> InsertEmployee(EmployeeViewModel viewModel)
         {

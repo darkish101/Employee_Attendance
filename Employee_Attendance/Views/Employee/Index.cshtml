@@ -1,0 +1,43 @@
+﻿@model AttendanceViewModel
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+
+<div class="card">
+    <h5 class="card-header">التحضير</h5>
+    <div class="card-body">
+        <div id="dvPartalView"></div>
+
+    </div>
+</div>
+
+
+
+
+
+<input type="hidden" value="@User.FindFirst(ClaimTypes.NameIdentifier).Value" />
+
+
+@*<script type="text/javascript">
+    function LoadPartialView() {
+
+    $.get("@Url.Action(MVC.ControllerName.LoadPartialViewDynamically())", { null }, function (data) {
+
+        $("#partialgoeshere").empty();
+        $("#partialgoeshere").html(data);
+
+    });
+
+}
+</script>*@
+
+@*<script>
+    $(document).ready(function () {
+        //console.log('@Model.Attendance.CheckInDayStart')
+        $("#dvPartalView").load('@Url.Action("CheckIn", "Employee")');
+    });
+</script>*@

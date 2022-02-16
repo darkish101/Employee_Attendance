@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace Employee_Attendance.Data
 {
-    public class EmployeeRepository //: BaseRepository<Employee, EmployeeAttendanceContext>
+    public class EmployeeRepository
     {
         private readonly EmployeeAttendanceContext _context;
-        public EmployeeRepository(EmployeeAttendanceContext dbContext)//: base(dbContext)
+        public EmployeeRepository(EmployeeAttendanceContext dbContext)
         {
             _context = dbContext;
         }
@@ -23,17 +23,5 @@ namespace Employee_Attendance.Data
         {
             return await _context.Employees.FindAsync(id);
         }
-
-
-        public virtual async Task InsertAsync(Employee model)
-        {
-            await _context.Employees.AddAsync(model);
-        }
-        public virtual async Task DeleteAsync(int Id)
-        {
-            var entity = await _context.Employees.FindAsync(Id);
-            _context.Employees.Remove(entity);
-        }
-
     }
 }

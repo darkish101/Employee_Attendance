@@ -43,7 +43,9 @@ namespace Employee_Attendance.Data.Migrations
                     Discriminator = table.Column<string>(nullable: false),
                     Employment_Id = table.Column<string>(nullable: true),
                     Employee_Name = table.Column<string>(nullable: true),
-                    Added_By = table.Column<string>(maxLength: 450, nullable: true)
+                    Added_By = table.Column<string>(maxLength: 450, nullable: true),
+                    Created_On = table.Column<DateTime>(nullable: true),
+                    LastUpdatedDate = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -156,6 +158,36 @@ namespace Employee_Attendance.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Attendances",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Created_On = table.Column<DateTime>(nullable: true, defaultValue: "GETDATE()"),
+                    LastUpdatedDate = table.Column<DateTime>(nullable: true),
+                    AttendanceDay = table.Column<DateTime>(type: "Date", nullable: false, defaultValue: "CONVERT(DATE ,GETDATE())"),
+                    CheckInDayStart = table.Column<TimeSpan>(type: "time(0)", nullable: false),
+                    CheckOutLunchBrake = table.Column<TimeSpan>(type: "time(0)", nullable: true),
+                    CheckInLunchBrake = table.Column<TimeSpan>(type: "time(0)", nullable: true),
+                    CheckOutDayEnd = table.Column<TimeSpan>(type: "time(0)", nullable: true),
+                    LateCheckIn = table.Column<bool>(type: "bit", nullable: true,defaultValue: "0"),
+                    LateCheckInReason = table.Column<string>(type: "nvarchar(150)", nullable: true),
+                    EarlyCheckOutDayEnd = table.Column<bool>(type: "bit", nullable: true, defaultValue: "0"),
+                    EarlyCheckOutReason = table.Column<string>(type: "nvarchar(150)", nullable: true),
+                    Employee_ID = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Attendances", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Attendances_AspNetUsers_Employee_ID",
+                        column: x => x.Employee_ID,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -194,6 +226,11 @@ namespace Employee_Attendance.Data.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Attendances_Employee_ID",
+                table: "Attendances",
+                column: "Employee_ID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -212,6 +249,9 @@ namespace Employee_Attendance.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Attendances");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

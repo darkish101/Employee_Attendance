@@ -30,33 +30,33 @@ namespace Employee_Attendance.Data.Migrations
                         .HasColumnType("Date");
 
                     b.Property<TimeSpan>("CheckInDayStart")
-                        .HasColumnType("time(7)");
+                        .HasColumnType("time(0)");
 
-                    b.Property<TimeSpan>("CheckInLunchBrake")
-                        .HasColumnType("time(7)");
+                    b.Property<TimeSpan?>("CheckInLunchBrake")
+                        .HasColumnType("time(0)");
 
-                    b.Property<TimeSpan>("CheckOutDayEnd")
-                        .HasColumnType("time(7)");
+                    b.Property<TimeSpan?>("CheckOutDayEnd")
+                        .HasColumnType("time(0)");
 
-                    b.Property<TimeSpan>("CheckOutLunchBrake")
-                        .HasColumnType("time(7)");
+                    b.Property<TimeSpan?>("CheckOutLunchBrake")
+                        .HasColumnType("time(0)");
 
                     b.Property<DateTime?>("Created_On")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("EarlyCheckOutDayEnd")
+                    b.Property<bool?>("EarlyCheckOutDayEnd")
                         .HasColumnType("bit");
 
                     b.Property<string>("EarlyCheckOutReason")
                         .HasColumnType("nvarchar(150)");
 
-                    b.Property<string>("EmployeeId")
+                    b.Property<string>("Employee_ID")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("LastUpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("LateCheckIn")
+                    b.Property<bool?>("LateCheckIn")
                         .HasColumnType("bit");
 
                     b.Property<string>("LateCheckInReason")
@@ -64,7 +64,7 @@ namespace Employee_Attendance.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmployeeId");
+                    b.HasIndex("Employee_ID");
 
                     b.ToTable("Attendances");
                 });
@@ -302,7 +302,7 @@ namespace Employee_Attendance.Data.Migrations
                 {
                     b.HasOne("Employee_Attendance.Data.Employee", "Employee")
                         .WithMany()
-                        .HasForeignKey("EmployeeId");
+                        .HasForeignKey("Employee_ID");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

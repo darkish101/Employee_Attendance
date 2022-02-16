@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace Employee_Attendance.Data
 {
@@ -38,9 +35,10 @@ namespace Employee_Attendance.Data
 
          [Column(TypeName = "nvarchar(150)", Order = 10)]
         public string EarlyCheckOutReason { get; set; }
-        
 
-         [Column(TypeName = "nvarchar(450)", Order = 11)]
+        [ForeignKey("Employee_ID")]
         public Employee Employee { get; set; }
+        [Column(TypeName = "nvarchar(450)", Order = 11)]
+        public string Employee_ID { get; set; }
     }
 }

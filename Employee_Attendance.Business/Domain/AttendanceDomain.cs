@@ -12,11 +12,14 @@ namespace Employee_Attendance.Business
   public  class AttendanceDomain : BaseDomain<Attendance, AttendanceRepository>
     {
         private readonly AttendanceRepository _repostory;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public AttendanceDomain(AttendanceRepository repository, IUnitOfWork unitOfWork
+        public AttendanceDomain(AttendanceRepository repository
+            , IUnitOfWork unitOfWork
             , IMapper mapper) : base(repository, unitOfWork)
         {
             _repostory = repository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
         public async Task InsertAttendance(AttendanceViewModel viewModel)
@@ -76,10 +79,30 @@ namespace Employee_Attendance.Business
                 throw;
             }
         }
+        public async Task<AttendanceViewModel> GetTodayAttendance(string today, string Employee_ID)
+        {
+            try
+            {
+                var data = await _repostory.GetAllAttendance();
+                var attendance = data.Where(x => x.AttendanceDay == DateTime.Parse(today)).Where(x => x.Employee.Id == Employee_ID).FirstOrDefault();
+                return _mapper.Map<AttendanceViewModel>(attendance);
+                //    new TemplateViewModel
+                //{
+                //    Id = template.Id,
+                //    Name = template.Name,
+                //    PhotoString = template.Photo,
+                //};
+            }
+            catch
+            {
+                throw;
+            }
+        } 
         public async Task<AttendanceViewModel> AttendanceById(int Id)
         {
             try
             {
+               // var result = _repository.FromSql($"call storedProcedureName()").ToList();
                 var data = await _repostory.GetAllAttendance();
                 var attendance = data.First(x => x.Id == Id);
                 return _mapper.Map<AttendanceViewModel>(attendance);
