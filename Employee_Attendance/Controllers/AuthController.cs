@@ -58,5 +58,17 @@ namespace Employee_Attendance.Controllers
             }
             return View();
         }
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            await _domain.LogoutAsync();
+            return RedirectToAction("Login", "Auth");
+        }
+
+          public async Task<IActionResult> AccessDenied()
+        {
+            await _domain.LogoutAsync();
+            return RedirectToAction("Index", "Home");
+        }
     }
 }

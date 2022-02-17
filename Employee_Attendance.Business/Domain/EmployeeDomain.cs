@@ -35,6 +35,10 @@ namespace Employee_Attendance.Business
         {
            return await _signInManager.PasswordSignInAsync(model.UserName, model.Passowrd, true, lockoutOnFailure: false);
         }
+        public async Task LogoutAsync()
+        {
+            await _signInManager.SignOutAsync();
+        }
         public async Task<IdentityResult> RegisterAsync(EmployeeViewModel model)
         {
             var user = _mapper.Map<Employee>(model);

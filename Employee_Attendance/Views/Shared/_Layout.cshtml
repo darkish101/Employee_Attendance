@@ -19,12 +19,29 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">الرئيسية</a>
                         </li>
-                        <li class="nav-item"  hidden=!@User.IsInRole("Admin") >
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        @if (User.IsInRole("Admin"))
+                        {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="Admin" asp-controller="Home" asp-action="Index">لوحة التحكم</a>
                         </li>
+                        }
                     </ul>
+                </div>
+                <div>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                    <div>@User.FindFirst(ClaimTypes.Name).Value</div>
+                        <form method="post" asp-controller="Auth" asp-action="Logout">
+                            <input type="submit" value="تسجيل الخروج" />
+                        </form>
+                    }
+                    else
+                    {
+                        <a asp-controller="Auth" asp-action="Login">تسجيل الدخول</a>
+                        <a asp-controller="Auth" asp-action="Register">تسجيل جديد</a>
+                    }
                 </div>
             </div>
         </nav>

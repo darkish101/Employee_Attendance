@@ -79,8 +79,8 @@ namespace Employee_Attendance
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(45);
 
                 options.LoginPath = "/Auth/Login";
-                //    options.LogoutPath = "/Account/Logout";
-                //options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+                options.LogoutPath = "/Auth/Logout";
+                options.AccessDeniedPath = "/Auth/AccessDenied";
                 options.SlidingExpiration = true;
             });
 
