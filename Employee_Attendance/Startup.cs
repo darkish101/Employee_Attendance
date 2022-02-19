@@ -33,10 +33,11 @@ namespace Employee_Attendance
         {
             services.AddHttpContextAccessor();
             services.AddDbContext<EmployeeAttendanceContext>(options =>
-                           options.UseSqlServer(
-                            Configuration.GetConnectionString("dbConctionString")))
+                           options.UseSqlServer(Configuration.GetConnectionString("dbConctionString")))
                            .AddUnitOfWork<EmployeeAttendanceContext>();
 
+            services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
+            
             services.AddControllersWithViews();
 
             services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Latest);
@@ -69,7 +70,7 @@ namespace Employee_Attendance
 
                 // User settings.
                 options.User.AllowedUserNameCharacters =
-                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+!#$";
                 options.User.RequireUniqueEmail = false;
             });
 
@@ -91,10 +92,13 @@ namespace Employee_Attendance
 
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
+
+            services.AddTransient<IMailService, MailService>();
             services.AddScoped<EmployeeDomain>();
             services.AddScoped<EmployeeRepository>();
             services.AddScoped<AttendanceDomain>();
             services.AddScoped<AttendanceRepository>();
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

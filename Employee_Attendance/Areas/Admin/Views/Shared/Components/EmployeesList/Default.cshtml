@@ -3,11 +3,10 @@
 <table class="table table-hover table-striped">
     <thead>
         <tr>
-            <th>م</th>
-            <th>Name</th>
-            <th>User Name</th>
-            <th>Employee Id</th>
-            <th>Email</th>
+            <th>الاسم</th>
+            <th>اسم المستخدم</th>
+            <th>رقم الموظف</th>
+            <th>البريد الاكتروني</th>
             <th></th>
         </tr>
     </thead>
@@ -17,8 +16,7 @@
             if (d.Id != User.FindFirst(ClaimTypes.NameIdentifier).Value)
             {
                 <tr>
-                    <td>@d.Id</td>
-                    <td><a asp-area="Admin" asp-controller="Employees" asp-action="Show" asp-route-id="@d.Id">@d.Employee_Name</a></td>
+                    <td>@d.Employee_Name</td>
                     <td>@d.UserName</td>
                     <td>@d.Employment_Id</td>
                     <td>@d.Email</td>

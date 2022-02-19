@@ -58,7 +58,6 @@ namespace Employee_Attendance.Controllers
             }
             return View();
         }
-        [HttpPost]
         public async Task<IActionResult> Logout()
         {
             await _domain.LogoutAsync();

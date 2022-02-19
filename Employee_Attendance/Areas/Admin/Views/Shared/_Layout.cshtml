@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Employee Attendance</title>
+    <title>لوحة التحكم</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     @*<link rel="stylesheet" href="~/css/site.css" />*@
     <link rel="stylesheet" href="~/Admin/css/styles.css" />
@@ -25,10 +25,7 @@
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="#!">Settings</a></li>
-                    <li><a class="dropdown-item" href="#!">Activity Log</a></li>
-                    <li><hr class="dropdown-divider" /></li>
-                    <li><a class="dropdown-item" href="#!">Logout</a></li>
+                    <li><a class="dropdown-item" asp-area="" asp-controller="Auth" asp-action="LogOut">تسجيل الخروج</a></li>
                 </ul>
             </li>
         </ul>
@@ -39,8 +36,12 @@
                 <div class="sb-sidenav-menu">
                     <div class="nav">
                         <a class="nav-link" asp-controller="Home" asp-action="Index" asp-area="Admin">
-                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                            <div class="sb-nav-link-icon"><i class="fa fa-light fa-tachograph-digital"></i></div>
                             الرئيسية
+                        </a> 
+                        <a class="nav-link" asp-controller="Home" asp-action="Index" asp-area="">
+                            <div class="sb-nav-link-icon"><i class="fa fa-light fa-firefox-browser"></i></div>
+                            الموقع الرئيسي
                         </a>
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                             <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
@@ -56,7 +57,7 @@
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
-                    <div class="small">Logged in as:</div>
+                    <div class="small">تم تسجيل الدخول بأسم المستخدم:</div>
                     @User.Identity.Name
                 </div>
             </nav>
@@ -88,8 +89,6 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/Admin/js/scripts.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    @*<script src="~/lib/jquery/dist/jquery.min.js"></script>*@
-    @*<script src="~/js/site.js" asp-append-version="true"></script>*@
     @RenderSection("Scripts", required: false)
 </body>
 </html>

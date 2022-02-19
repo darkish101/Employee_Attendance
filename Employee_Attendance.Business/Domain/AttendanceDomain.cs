@@ -4,119 +4,85 @@ using Employee_Attendance.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Employee_Attendance.Business
 {
-  public  class AttendanceDomain : BaseDomain<Attendance, AttendanceRepository>
+    public class AttendanceDomain : BaseDomain<Attendance, AttendanceRepository>
     {
         private readonly AttendanceRepository _repostory;
-        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         public AttendanceDomain(AttendanceRepository repository
             , IUnitOfWork unitOfWork
             , IMapper mapper) : base(repository, unitOfWork)
         {
             _repostory = repository;
-            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public async Task InsertAttendance(AttendanceViewModel viewModel)
+        public async Task AttendanceHandlerAsync(string Employee_ID, string TypeOfOpration, string Note)
         {
             try
             {
-                var modal = _mapper.Map<Attendance>(viewModel);
-                
-                await base.InsertAsync(modal);
+                await _repository.ExceSPAsync(Employee_ID, TypeOfOpration, Note);
             }
             catch
             {
                 throw;
             }
         }
-        public async Task UpdateAttendance(AttendanceViewModel viewModel)
-        {
-            try
-            {
-                var modal = _mapper.Map<Attendance>(viewModel);
 
-                await base.UpdateAsync(modal);
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        public async Task DeleteAttendance(int Id)
-        {
-            try
-            {
-                await base.DeleteAsync(Id);
-            }
-            catch
-            {
-                throw;
-            }
-        }
         public async Task<List<AttendanceViewModel>> GetAllAttendance()
         {
             try
             {
                 var attendances = await _repostory.GetAllAttendance();
-                var modal = _mapper.Map<List<AttendanceViewModel>>(attendances);
 
-                return modal;
-                //    categories.Select(x => new TemplateViewModel
-                //{
-                //    Id = x.Id,
-                //    Name = x.Name,
-                //    PhotoString = x.Photo,
-                //}).ToList();
+                return _mapper.Map<List<AttendanceViewModel>>(attendances);
             }
             catch
             {
                 throw;
             }
         }
-        public async Task<AttendanceViewModel> GetTodayAttendance(string today, string Employee_ID)
+        public async Task<AttendanceViewModel> GetDayAttendanceAsync(string day, string Employee_ID)
         {
             try
             {
-                var data = await _repostory.GetAllAttendance();
-                var attendance = data.Where(x => x.AttendanceDay == DateTime.Parse(today)).Where(x => x.Employee.Id == Employee_ID).FirstOrDefault();
-                return _mapper.Map<AttendanceViewModel>(attendance);
-                //    new TemplateViewModel
-                //{
-                //    Id = template.Id,
-                //    Name = template.Name,
-                //    PhotoString = template.Photo,
-                //};
+                Func<Attendance, bool> expression = e => e.Employee_ID == Employee_ID && e.AttendanceDay == DateTime.Parse(day);
+                var data = await _repository.GetAttendance();
+
+                var modal = data.Where(expression).FirstOrDefault();
+
+                if (modal == null)
+                    modal = new Attendance();
+
+                return _mapper.Map<AttendanceViewModel>(modal);
             }
             catch
             {
                 throw;
             }
-        } 
-        public async Task<AttendanceViewModel> AttendanceById(int Id)
+        }
+
+        public async Task<HoursWorkedViewModel> HoursWorked(string Employee_ID)
         {
-            try
+            var sunday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek);// begin of week
+            var thursday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Thursday); // end of week
+            Func<Attendance, bool> expression = e => e.Employee_ID == Employee_ID && (e.AttendanceDay >= sunday && e.AttendanceDay <= thursday);
+
+            var data = await _repository.GetAttendance();
+            double HoursWorked = 0;
+
+            foreach (var aDay in data.Where(expression).ToList())
             {
-               // var result = _repository.FromSql($"call storedProcedureName()").ToList();
-                var data = await _repostory.GetAllAttendance();
-                var attendance = data.First(x => x.Id == Id);
-                return _mapper.Map<AttendanceViewModel>(attendance);
-                //    new TemplateViewModel
-                //{
-                //    Id = template.Id,
-                //    Name = template.Name,
-                //    PhotoString = template.Photo,
-                //};
+                HoursWorked += aDay.CheckOutDayEnd.HasValue ? (aDay.CheckOutDayEnd.Value - aDay.CheckInDayStart).TotalHours : 0;
             }
-            catch
-            {
-                throw;
-            }
+            return new HoursWorkedViewModel { Hours = HoursWorked.ToString("0.0#"), HoursRemaing = (40 - HoursWorked <= 0 ? 0 : 40 - HoursWorked).ToString("0.0#") };
+        }
+
+        public async Task DeleteEmployeeAttendance(string employee_ID)
+        {
+            await _repository.DeleteAttendance(employee_ID);
         }
     }
 }

@@ -14,20 +14,21 @@ namespace Employee_Attendance.Business
     {
         #region ctor
         private readonly EmployeeRepository _employeeRepository;
-        private readonly IUnitOfWork _iUnitOfWork;
+        private readonly AttendanceDomain _attendanDomain;
         private readonly UserManager<Employee> _userManager;
         private readonly SignInManager<Employee> _signInManager;
         private readonly IMapper _mapper;
         public EmployeeDomain(EmployeeRepository repository
             , IUnitOfWork unitOfWork
             , UserManager<Employee> userManager
+            , AttendanceDomain attendanDomain
             , SignInManager<Employee> signInManager
             , IMapper mapper)
         {
             _employeeRepository = repository;
-            _iUnitOfWork = unitOfWork;
             _userManager = userManager;
             _signInManager = signInManager;
+            _attendanDomain = attendanDomain;
             _mapper = mapper;
         }
         #endregion
@@ -54,19 +55,7 @@ namespace Employee_Attendance.Business
         }
         public async Task <IdentityResult> InsertEmployee(EmployeeViewModel viewModel)
         {
-            //var employee = new Employee();
-            //employee.Employee_Name = viewModel.Employee_Name;
-            //employee.Employment_Id = viewModel.Employment_Id;
-            //employee.Email = viewModel.Email;
-            //employee.UserName = viewModel.UserName;
-            //employee.Added_By = viewModel.Added_By;
-
-            //var result = await _userManager.CreateAsync(employee, viewModel.Passowrd);
-           
-
-            var result = await _userManager.CreateAsync(_mapper.Map<Employee>(viewModel), viewModel.Passowrd);
-
-            return result;
+            return await _userManager.CreateAsync(_mapper.Map<Employee>(viewModel), viewModel.Passowrd);
         }
         public async Task UpdateEmployee(EmployeeViewModel viewModel)
         {
@@ -79,8 +68,10 @@ namespace Employee_Attendance.Business
                 employee.UserName = viewModel.UserName;
                 employee.Id = viewModel.Id;
 
+                if (!string.IsNullOrEmpty(viewModel.Passowrd))
+                    employee.PasswordHash = viewModel.Passowrd;
+
                 await _userManager.UpdateAsync(employee);
-                //await _iUnitOfWork.SaveChangesAsync(); // base.UpdateAsync(employee);
             }
             catch
             {
@@ -91,7 +82,8 @@ namespace Employee_Attendance.Business
         {
             try
             {
-                var result = await _userManager.DeleteAsync(await _employeeRepository.GetEmployeeById(Id));
+                await _attendanDomain.DeleteEmployeeAttendance(Id);
+                await _userManager.DeleteAsync(await _employeeRepository.GetEmployeeById(Id));
             }
             catch
             {
@@ -124,15 +116,7 @@ namespace Employee_Attendance.Business
             {
                 var Data = await _employeeRepository.GetAllEmployee();
                 var employee = Data.First(x => x.Id == Id);
-                return new EmployeeViewModel
-                {
-                    Employee_Name = employee.Employee_Name,
-                    Employment_Id = employee.Employment_Id,
-                    Email = employee.Email,
-                    UserName = employee.UserName,
-                    Added_By = employee.Added_By,
-                    Id = employee.Id
-                };
+                return _mapper.Map<EmployeeViewModel>(employee);
             }
             catch
             {

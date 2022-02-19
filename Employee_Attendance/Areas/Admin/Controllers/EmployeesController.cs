@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Employee_Attendance.Areas.Admin.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [Area("Admin")]
     public class EmployeesController : Controller
     {
@@ -57,20 +57,34 @@ namespace Employee_Attendance.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Save(EmployeeViewModel modal)
         {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    modal.Added_By = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                    var result = await _domain.InsertEmployee(modal);
-                    if (result.Succeeded)
-                        return RedirectToAction("Index", "Employees");
+            //if (ModelState.IsValid)
+            //{
+                if(modal.Employment_Id == null)
+                { try
+                    {
+                        modal.Added_By = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                        var result = await _domain.InsertEmployee(modal);
+                        if (result.Succeeded)
+                            return RedirectToAction("Index", "Employees");
+                    }
+                    catch
+                    { } 
                 }
-                catch
-                { }
-            }
-            ModelState.AddModelError("save modal error", "الرجاء إكمال تعبة النموذج.");
-            return View("Employee", modal);
+                else
+                {
+                    try
+                    {
+                        modal.Added_By = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                        await _domain.UpdateEmployee(modal);
+                    }
+                    catch
+                    { }
+
+                }
+                            return RedirectToAction("Index", "Employees");
+            //}
+            //ModelState.AddModelError("save modal error", "الرجاء إكمال تعبة النموذج.");
+            //return View("Employee", modal);
         }
     }
 }

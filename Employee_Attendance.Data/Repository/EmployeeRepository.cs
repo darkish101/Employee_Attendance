@@ -19,6 +19,7 @@ namespace Employee_Attendance.Data
         {
             return await _context.Employees.ToListAsync();
         }
+
         public virtual async Task<Employee> GetEmployeeById(string id)
         {
             return await _context.Employees.FindAsync(id);

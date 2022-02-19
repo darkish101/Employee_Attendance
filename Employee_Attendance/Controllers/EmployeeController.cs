@@ -1,4 +1,5 @@
 ﻿using Employee_Attendance.Business;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace Employee_Attendance.Controllers
 {
+    [Authorize(Roles = "Employee,Admin")]
     public class EmployeeController : Controller
     {
         private readonly AttendanceDomain _domain;
@@ -16,23 +18,34 @@ namespace Employee_Attendance.Controllers
         {
             _domain = domain;
         }
-        // GET: EmployeeController
         public async Task<ActionResult> Index()
         {
-            var result = await _domain.GetTodayAttendance(DateTime.Today.ToString(), User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            if (result == null)
-                return PartialView("_CheckIn", new AttendanceViewModel());
-            return View();
+            return View(await _domain.GetDayAttendanceAsync(DateTime.Today.ToShortDateString(), User.FindFirst(ClaimTypes.NameIdentifier).Value));
         }
 
-        public async Task<ActionResult> CheckIn(AttendanceViewModel model)
+         public async Task<ActionResult> GetHours()
         {
-            model.AttendanceDay = DateTime.Now;
-            model.Employee_ID = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-           await _domain.InsertAttendance(model);
-            return PartialView("_CheckIn", model);
+            var modal = await _domain.HoursWorked(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            return PartialView("_HoursWorked", await _domain.HoursWorked(User.FindFirst(ClaimTypes.NameIdentifier).Value));
         }
 
-       
+        [HttpPost]
+        public async Task<ActionResult> CheckInOutAsync(AttendanceViewModel model)
+        {
+            var Employee_ID = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+          await  _domain.AttendanceHandlerAsync(Employee_ID, string.Empty, model.Note);
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> LunchBrakeAsync(AttendanceViewModel model)
+        {
+            var Employee_ID = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            string methodType = "LunchBrakeIN";
+            if ( model.CheckOutLunchBrake == null)
+                methodType = "LunchBrakeOUT";
+           await _domain.AttendanceHandlerAsync(Employee_ID, methodType, string.Empty);
+            return RedirectToAction("Index");
+        }
     }
 }
