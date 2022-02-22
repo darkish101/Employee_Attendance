@@ -83,6 +83,10 @@ namespace Employee_Attendance.Business
                 }
                 
             }
+            catch
+            {
+                throw;
+            }
         }
         public async Task DeleteEmployee(string Id)
         {
