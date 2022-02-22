@@ -5,6 +5,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <h1>تسجيل جديد</h1>
+            <br />
             <div class="form-row">
                 <div class="col">
                     <input type="text" asp-for="UserName" class="form-control" />
@@ -16,7 +17,7 @@
                     <span asp-validation-for="Employment_Id" class="text-danger"></span>
                 </div>
             </div>
-
+            <br />
             <div class="form-row">
                 <div class="col">
                     <input type="text" asp-for="Employee_Name" class="form-control" />
@@ -27,6 +28,7 @@
                     <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
             </div>
+            <br />
             <div class="form-row">
                 <div class="col">
                     <input type="password" asp-for="Passowrd" class="form-control" />
@@ -55,6 +57,9 @@
 
             <br />
             <button type="submit" class="btn btn-primary btn-lg">تسجيل</button>
+            <br />
+            <br />
+            <a href="Login">تسجيل الدخول</a>
         </div>
     </div>
 </form>

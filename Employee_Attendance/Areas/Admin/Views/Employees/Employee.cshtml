@@ -19,7 +19,7 @@
                     <span asp-validation-for="Employment_Id" class="text-danger"></span>
                 </div>
             </div>
-
+            <br />
             <div class="form-row">
                 <div class="col">
                     <input type="text" asp-for="Employee_Name" class="form-control" />
@@ -30,6 +30,7 @@
                     <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
             </div>
+            <br />
             <div class="form-row">
                 <div class="col">
                     <input type="password" asp-for="Passowrd" class="form-control" />
@@ -52,7 +53,6 @@
                 </div>
             </div>*@
 
-            <input type="hidden" asp-for="Added_By" value="@User.FindFirst(ClaimTypes.NameIdentifier).Value" />
             @Html.HiddenFor(m => m.Id)
             @Html.AntiForgeryToken()
 

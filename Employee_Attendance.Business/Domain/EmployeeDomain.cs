@@ -68,12 +68,22 @@ namespace Employee_Attendance.Business
                 employee.UserName = viewModel.UserName;
                 employee.Id = viewModel.Id;
 
-                if (!string.IsNullOrEmpty(viewModel.Passowrd))
-                    employee.PasswordHash = viewModel.Passowrd;
+
+
+                //if (!string.IsNullOrEmpty(_password))
+                //    employee.PasswordHash = _password;
+
+                    //var updateModel = _mapper.Map<Employee>(viewModel);
 
                 await _userManager.UpdateAsync(employee);
+                if (!string.IsNullOrEmpty(viewModel.Passowrd))
+                {
+                    var token = await _userManager.GeneratePasswordResetTokenAsync(employee);
+                    var result = await _userManager.ResetPasswordAsync(employee, token, viewModel.Passowrd);
+                }
+                
             }
-            catch
+            catch (Exception ex)
             {
                 throw;
             }

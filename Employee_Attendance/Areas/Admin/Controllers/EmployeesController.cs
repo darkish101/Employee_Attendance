@@ -57,18 +57,26 @@ namespace Employee_Attendance.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Save(EmployeeViewModel modal)
         {
-            //if (ModelState.IsValid)
-            //{
-                if(modal.Employment_Id == null)
-                { try
+            var ms = ModelState;
+            if (modal.Passowrd is null && modal.Confirmpwd is null && !string.IsNullOrEmpty(modal.Id)) 
+            {
+                ModelState.Remove("Passowrd");
+                ModelState.Remove("Confirmpwd");
+            }
+            if (ModelState.IsValid)
+            {
+                if (modal.Employment_Id == null)
+                {
+                    try
                     {
                         modal.Added_By = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                         var result = await _domain.InsertEmployee(modal);
                         if (result.Succeeded)
                             return RedirectToAction("Index", "Employees");
+                        return RedirectToAction("Employee", modal);
                     }
                     catch
-                    { } 
+                    { }
                 }
                 else
                 {
@@ -81,10 +89,10 @@ namespace Employee_Attendance.Areas.Admin.Controllers
                     { }
 
                 }
-                            return RedirectToAction("Index", "Employees");
-            //}
-            //ModelState.AddModelError("save modal error", "الرجاء إكمال تعبة النموذج.");
-            //return View("Employee", modal);
+                return RedirectToAction("Index", "Employees");
+            }
+            ModelState.AddModelError("save modal error", "الرجاء إكمال تعبة النموذج.");
+            return View("Employee", modal);
         }
     }
 }

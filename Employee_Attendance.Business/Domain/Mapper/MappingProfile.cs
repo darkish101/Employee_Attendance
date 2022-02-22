@@ -15,9 +15,12 @@ namespace Employee_Attendance.Business
             CreateMap<AttendanceViewModel, Attendance>();
 
             CreateMap<Employee, EmployeeViewModel>()
-                .ForSourceMember(e => e.Id, opt => opt.DoNotValidate()); ;
+                //.ForMember(e => e.Passowrd, m => m.MapFrom(m => m.PasswordHash))
+                .ForSourceMember(e => e.PasswordHash, opt => opt.DoNotValidate())
+                .ForSourceMember(e => e.Id, opt => opt.DoNotValidate());
             CreateMap<EmployeeViewModel, Employee>()
-                .ForMember(e => e.PasswordHash, m => m.MapFrom(m => m.Passowrd))
+                .ForSourceMember(e => e.Passowrd, opt => opt.DoNotValidate())
+                //.ForMember(e => e.PasswordHash, m => m.MapFrom(m => m.Passowrd))
                 .ForSourceMember(e => e.Id, opt => opt.DoNotValidate());
         }
     }
