@@ -83,10 +83,6 @@ namespace Employee_Attendance.Business
                 }
                 
             }
-            catch (Exception ex)
-            {
-                throw;
-            }
         }
         public async Task DeleteEmployee(string Id)
         {
