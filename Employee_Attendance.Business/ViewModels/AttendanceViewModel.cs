@@ -20,9 +20,8 @@ namespace Employee_Attendance.Business
 
         [DefaultValue(0)]
         public bool? LateCheckIn { get; set; }
+
         // LateCheckInReason, EarlyCheckOutReason
-
-
         [Display(Name = "الملاحظة", Prompt = "ملاحظة")]
         [StringLength(150)]
         public string Note { get; set; }
