@@ -34,7 +34,27 @@ namespace Employee_Attendance.Business
         #endregion
         public async Task<SignInResult> LoginAsync(LoginViewModel model)
         {
-           return await _signInManager.PasswordSignInAsync(model.UserName, model.Passowrd, true, lockoutOnFailure: false);
+            //// personal user auth
+            //var claims = new List<Claim> { null };
+            //claims = new List<Claim>
+            //            {
+            //                new Claim("Id", id.ToString()),
+            //                new Claim(ClaimTypes.Name, name),
+            //                new Claim(ClaimTypes.GivenName,name),
+            //                new Claim(ClaimTypes.Role, role.ToString()),
+            //                new Claim("Image", string.IsNullOrWhiteSpace(dp) ? "Default.jpg" : dp),
+            //            };
+            //// Create the principal user from the claims
+            //ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            //ClaimsPrincipal principal = new ClaimsPrincipal(identity);
+            //AuthenticationProperties authenticationProperties = new AuthenticationProperties { IsPersistent = true };
+            //// Ask MVC to create the auth cookie and store it
+            //await HttpContext.SignInAsync(
+            //    CookieAuthenticationDefaults.AuthenticationScheme,
+            //    principal,
+            //    authenticationProperties);
+
+            return await _signInManager.PasswordSignInAsync(model.UserName, model.Passowrd, true, lockoutOnFailure: false);
         }
         public async Task LogoutAsync()
         {

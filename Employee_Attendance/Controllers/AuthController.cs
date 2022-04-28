@@ -56,7 +56,7 @@ namespace Employee_Attendance.Controllers
                 else
                     ModelState.AddModelError(string.Empty, result.Errors.ToString());
             }
-            return View();
+            return View("Register", modal);
         }
         public async Task<IActionResult> Logout()
         {
